@@ -3,285 +3,131 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hospital Price Comparison | Charge Master Tool</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
-  <!-- Favicon (optional). If you don't have one, you can remove this line. -->
-  <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+  <title>HealthRates</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* General Styles */
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f4f7fa;
+    /* Reset & Global Styles */
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    .header {
-      background-color: #00bfae;
-      padding: 20px 0;
-      text-align: center;
-      color: white;
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
     }
-
-    .header h1 {
-      font-size: 2rem;
-      margin: 0;
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
     }
-
-    .container {
+    
+    /* Top Pink Bar */
+    .top-bar {
+      background-color: #ff1493; /* A vivid pink */
+      color: #fff;
+      padding: 15px 30px;
       display: flex;
       justify-content: space-between;
-      padding: 30px;
+      align-items: center;
     }
-
-    .sidebar {
-      width: 25%;
-      background-color: #ffffff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .filters {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .filter-group label {
+    
+    .top-bar .logo {
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-bottom: 5px;
     }
-
-    .filter-group select {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #dcdcdc;
+    
+    .top-bar .auth-links {
       font-size: 1rem;
     }
-
-    .main-content {
-      width: 70%;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      color: #2f2f2f;
-      margin-bottom: 1.5rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #f4f7fa;
-    }
-
-    th {
-      background-color: #00bfae;
-      color: white;
-    }
-
-    tr:hover {
-      background-color: #f4f7fa;
-    }
-
-    .no-results {
+    
+    /* Secondary Lighter Pink Bar */
+    .sub-bar {
+      background-color: #ffb6c1; /* Light pink */
+      color: #fff;
+      padding: 10px 30px;
       text-align: center;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    
+    /* Main Content Area */
+    .main-content {
+      padding: 30px;
+    }
+    
+    /* Search Bar Container */
+    .search-container {
+      background-color: #ff69b4; /* Regular pink shade */
       padding: 20px;
-      color: #666;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .search-container input[type="text"] {
+      width: 80%;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      font-size: 1rem;
+    }
+    
+    .search-container button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #fff;
+      color: #ff69b4;
+      font-size: 1rem;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    .search-container button:hover {
+      background-color: #ffe6f0;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>🏥 Hospital Price Comparison</h1>
-  </div>
-
-  <div class="container">
-    <div class="sidebar">
-      <div class="filters">
-        <div class="filter-group">
-          <label for="hospitalSelect">Hospital</label>
-          <select id="hospitalSelect" class="filter"></select>
-        </div>
-        <div class="filter-group">
-          <label for="cptSelect">CPT Code</label>
-          <select id="cptSelect" class="filter"></select>
-        </div>
-        <div class="filter-group">
-          <label for="descSelect">Description</label>
-          <select id="descSelect" class="filter"></select>
-        </div>
-      </div>
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="logo">HealthRates</div>
+    <div class="auth-links">
+      <a href="#">Sign Up</a>
+      <a href="#">Sign In</a>
     </div>
-
-    <div class="main-content">
-      <div id="results">
-        <h2>Procedure Pricing Comparison</h2>
-        <table class="results-table">
-          <thead>
-            <tr>
-              <th>Hospital</th>
-              <th>CPT Code</th>
-              <th>Description</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody id="resultsBody"></tbody>
-        </table>
-      </div>
-    </div>
+  </header>
+  
+  <!-- Secondary Bar -->
+  <div class="sub-bar">
+    Transparency for all
   </div>
-
+  
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search by CPT code or Hospital name..." />
+      <button type="button" id="searchButton">Search</button>
+    </div>
+    
+    <!-- Additional content can go here -->
+  </main>
+  
   <script>
-    // Sample data for the table
-    const sampleData = [
-      {
-        hospital: 'City Hospital',
-        cpt: '99213',
-        description: 'Office visit, established patient',
-        price: 150.0,
-      },
-      {
-        hospital: 'City Hospital',
-        cpt: '99214',
-        description: 'Office visit, established patient, moderate complexity',
-        price: 225.0,
-      },
-      {
-        hospital: 'General Medical Center',
-        cpt: '99213',
-        description: 'Office visit, established patient',
-        price: 160.0,
-      },
-      {
-        hospital: 'General Medical Center',
-        cpt: '99215',
-        description: 'Office visit, established patient, high complexity',
-        price: 275.0,
-      },
-      {
-        hospital: 'MediCare Hospital',
-        cpt: '99213',
-        description: 'Office visit, established patient',
-        price: 145.0,
-      },
-      {
-        hospital: 'MediCare Hospital',
-        cpt: '99214',
-        description: 'Office visit, established patient, moderate complexity',
-        price: 210.0,
-      },
-    ];
-
-    // Initialize the filters and table when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function () {
-      init(sampleData);
+    // JavaScript for search functionality (currently just logs the search query)
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const query = document.getElementById('searchInput').value;
+      console.log('Search query:', query);
+      // You can later add code to perform the actual search.
     });
-
-    // Initialize the filters and display table data
-    function init(data) {
-      initFilters(data);
-      updateDisplay(data);
-    }
-
-    // Initialize filters for Hospital, CPT, and Description
-    function initFilters(data) {
-      const hospitalSelect = document.getElementById('hospitalSelect');
-      const cptSelect = document.getElementById('cptSelect');
-      const descSelect = document.getElementById('descSelect');
-
-      const uniqueHospitals = [...new Set(data.map((item) => item.hospital))];
-      const uniqueCPTs = [...new Set(data.map((item) => item.cpt))];
-      const uniqueDescs = [...new Set(data.map((item) => item.description))];
-
-      populateDropdown(hospitalSelect, uniqueHospitals);
-      populateDropdown(cptSelect, uniqueCPTs);
-      populateDropdown(descSelect, uniqueDescs);
-
-      // Update display when a filter changes
-      document.querySelectorAll('.filter').forEach((filter) => {
-        filter.addEventListener('change', () => updateDisplay(data));
-      });
-    }
-
-    // Helper function to populate a dropdown
-    function populateDropdown(selectElement, items) {
-      // Add default option to show all items
-      selectElement.innerHTML = '<option value="">All</option>';
-      items.forEach((item) => {
-        const option = document.createElement('option');
-        option.value = item;
-        option.textContent = item;
-        selectElement.appendChild(option);
-      });
-    }
-
-    // Update the table display based on selected filters
-    function updateDisplay(data) {
-      const selectedHospital = document.getElementById('hospitalSelect').value;
-      const selectedCPT = document.getElementById('cptSelect').value;
-      const selectedDesc = document.getElementById('descSelect').value;
-
-      let filtered = data.filter(
-        (item) =>
-          (selectedHospital === '' || item.hospital === selectedHospital) &&
-          (selectedCPT === '' || item.cpt === selectedCPT) &&
-          (selectedDesc === '' || item.description === selectedDesc)
-      );
-
-      // Remove duplicates based on hospital, CPT, and description
-      filtered = filtered.filter((value, index, self) =>
-        index ===
-        self.findIndex(
-          (t) =>
-            t.hospital === value.hospital &&
-            t.cpt === value.cpt &&
-            t.description === value.description
-        )
-      );
-
-      updateResultsTable(filtered);
-    }
-
-    // Render the filtered results into the table
-    function updateResultsTable(filtered) {
-      const resultsBody = document.getElementById('resultsBody');
-      if (filtered.length === 0) {
-        resultsBody.innerHTML =
-          '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
-      } else {
-        resultsBody.innerHTML = filtered
-          .map(
-            (item) => `
-          <tr>
-            <td>${item.hospital}</td>
-            <td>${item.cpt}</td>
-            <td>${item.description}</td>
-            <td>$${item.price.toFixed(2)}</td>
-          </tr>
-        `
-          )
-          .join('');
-      }
-    }
   </script>
 </body>
 </html>

@@ -1,0 +1,103 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 /* General Styles */\
+body \{\
+    font-family: 'Inter', sans-serif;\
+    background-color: #f4f7fa;\
+    margin: 0;\
+    padding: 0;\
+\}\
+\
+.header \{\
+    background-color: #00bfae;\
+    padding: 20px 0;\
+    text-align: center;\
+    color: white;\
+\}\
+\
+.header h1 \{\
+    font-size: 2rem;\
+    margin: 0;\
+\}\
+\
+.container \{\
+    display: flex;\
+    justify-content: space-between;\
+    padding: 30px;\
+\}\
+\
+.sidebar \{\
+    width: 25%;\
+    background-color: #ffffff;\
+    border-radius: 8px;\
+    padding: 20px;\
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\
+\}\
+\
+.filters \{\
+    display: flex;\
+    flex-direction: column;\
+    gap: 20px;\
+\}\
+\
+.filter-group \{\
+    display: flex;\
+    flex-direction: column;\
+\}\
+\
+.filter-group label \{\
+    font-weight: 600;\
+    margin-bottom: 5px;\
+\}\
+\
+.filter-group select \{\
+    padding: 10px;\
+    border-radius: 8px;\
+    border: 1px solid #dcdcdc;\
+    font-size: 1rem;\
+\}\
+\
+.main-content \{\
+    width: 70%;\
+\}\
+\
+h2 \{\
+    font-size: 1.5rem;\
+    color: #2f2f2f;\
+    margin-bottom: 1.5rem;\
+\}\
+\
+table \{\
+    width: 100%;\
+    border-collapse: collapse;\
+    background-color: white;\
+    border-radius: 8px;\
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\
+\}\
+\
+th, td \{\
+    padding: 12px;\
+    text-align: left;\
+    border-bottom: 1px solid #f4f7fa;\
+\}\
+\
+th \{\
+    background-color: #00bfae;\
+    color: white;\
+\}\
+\
+tr:hover \{\
+    background-color: #f4f7fa;\
+\}\
+\
+.no-results \{\
+    text-align: center;\
+    padding: 20px;\
+    color: #666;\
+\}\
+}

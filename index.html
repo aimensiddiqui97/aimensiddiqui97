@@ -1,264 +1,287 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2113.65">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000; min-height: 14.0px}
-    span.s1 {font-kerning: none}
-    span.s2 {font: 12.0px 'Apple Color Emoji'; font-kerning: none}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospital Price Comparison | Charge Master Tool</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Favicon (optional). If you don't have one, you can remove this line. -->
+  <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background-color: #00bfae;
+      padding: 20px 0;
+      text-align: center;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      padding: 30px;
+    }
+
+    .sidebar {
+      width: 25%;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .filters {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .filter-group select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #dcdcdc;
+      font-size: 1rem;
+    }
+
+    .main-content {
+      width: 70%;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #2f2f2f;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #f4f7fa;
+    }
+
+    th {
+      background-color: #00bfae;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f4f7fa;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Hospital Price Comparison | Charge Master Tool&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>/* General Styles */</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>body {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #f4f7fa;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.header {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #00bfae;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-align: center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.header h1 {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 2rem;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin: 0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.container {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>justify-content: space-between;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 30px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.sidebar {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 25%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #ffffff;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 8px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.filters {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-direction: column;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>gap: 20px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.filter-group {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>display: flex;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>flex-direction: column;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.filter-group label {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-weight: 600;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.filter-group select {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 8px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border: 1px solid #dcdcdc;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 1rem;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.main-content {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 70%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>h2 {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: #2f2f2f;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>margin-bottom: 1.5rem;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>table {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>width: 100%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-collapse: collapse;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-radius: 8px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>th, td {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 12px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-align: left;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid #f4f7fa;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>th {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #00bfae;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: white;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>tr:hover {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>background-color: #f4f7fa;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>.no-results {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>text-align: center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>padding: 20px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>color: #666;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="header"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;h1&gt;</span><span class="s2">🏥</span><span class="s1"> Hospital Price Comparison&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="sidebar"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div class="filters"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="filter-group"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;label for="hospitalSelect"&gt;Hospital&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;select id="hospitalSelect" class="filter"&gt;&lt;/select&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="filter-group"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;label for="cptSelect"&gt;CPT Code&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;select id="cptSelect" class="filter"&gt;&lt;/select&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;div class="filter-group"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;label for="descSelect"&gt;Description&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;select id="descSelect" class="filter"&gt;&lt;/select&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="main-content"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;div id="results"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;h2&gt;Procedure Pricing Comparison&lt;/h2&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;table class="results-table"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;thead&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;th&gt;Hospital&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;th&gt;CPT Code&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;th&gt;Description&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;th&gt;Price&lt;/th&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/tr&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/thead&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;tbody id="resultsBody"&gt;&lt;/tbody&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>&lt;/table&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Generate random sample data</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const sampleData = [</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ hospital: 'City Hospital', cpt: '99213', description: 'Office visit, established patient', price: 150.00 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ hospital: 'City Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 225.00 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ hospital: 'General Medical Center', cpt: '99213', description: 'Office visit, established patient', price: 160.00 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ hospital: 'General Medical Center', cpt: '99215', description: 'Office visit, established patient, high complexity', price: 275.00 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ hospital: 'MediCare Hospital', cpt: '99213', description: 'Office visit, established patient', price: 145.00 },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>{ hospital: 'MediCare Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 210.00 }</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>];</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Initialize the filters and table</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function init(data) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>initFilters(data);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>updateDisplay(data);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Initialize the filters with Hospital, CPT Codes, and Descriptions</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function initFilters(data) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const hospitalSelect = document.getElementById('hospitalSelect');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const cptSelect = document.getElementById('cptSelect');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const descSelect = document.getElementById('descSelect');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const uniqueHospitals = [...new Set(data.map(item =&gt; item.hospital))];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const uniqueCPTs = [...new Set(data.map(item =&gt; item.cpt))];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const uniqueDescs = [...new Set(data.map(item =&gt; item.description))];</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Populate Hospital dropdown</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>uniqueHospitals.forEach(hospital =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const option = document.createElement('option');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>option.value = hospital;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>option.textContent = hospital;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>hospitalSelect.appendChild(option);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Populate CPT Code dropdown</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>uniqueCPTs.forEach(cpt =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const option = document.createElement('option');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>option.value = cpt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>option.textContent = cpt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>cptSelect.appendChild(option);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Populate Description dropdown</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>uniqueDescs.forEach(desc =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>const option = document.createElement('option');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>option.value = desc;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>option.textContent = desc;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>descSelect.appendChild(option);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Add event listeners to apply filters on change</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.filter').forEach(filter =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>filter.addEventListener('change', () =&gt; updateDisplay(data));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Update display based on selected filters</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>function updateDisplay(data) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const selectedHospital = document.getElementById('hospitalSelect').value;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const selectedCPT = document.getElementById('cptSelect').value;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const selectedDesc = document.getElementById('descSelect').value;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Filter data based on selected values</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>let filtered = data.filter(item =&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>(selectedHospital === '' || item.hospital === selectedHospital) &amp;&amp;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>(selectedCPT === '' || item.cpt === selectedCPT) &amp;&amp;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>(selectedDesc === '' || item.description === selectedDesc)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Ensure unique prices for CPT - Description per hospital</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>filtered = filtered.filter((value, index, self) =&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>index === self.findIndex((t) =&gt; (</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>t.hospital === value.hospital &amp;&amp; t.cpt === value.cpt &amp;&amp; t.description === value.description</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>))</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// Update results table</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const resultsBody = document.getElementById('resultsBody');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>if (filtered.length === 0) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>resultsBody.innerHTML = '&lt;tr&gt;&lt;td colspan="4" class="no-results"&gt;No results found.&lt;/td&gt;&lt;/tr&gt;';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>} else {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>resultsBody.innerHTML = filtered.map(item =&gt; {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>return `</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;tr&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;${item.hospital}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;${item.cpt}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;${item.description}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;td&gt;$${item.price.toFixed(2)}&lt;/td&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/tr&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                    </span>`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>}).join('');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Initialize the page with sample data</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>init(sampleData);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+  <div class="header">
+    <h1>🏥 Hospital Price Comparison</h1>
+  </div>
+
+  <div class="container">
+    <div class="sidebar">
+      <div class="filters">
+        <div class="filter-group">
+          <label for="hospitalSelect">Hospital</label>
+          <select id="hospitalSelect" class="filter"></select>
+        </div>
+        <div class="filter-group">
+          <label for="cptSelect">CPT Code</label>
+          <select id="cptSelect" class="filter"></select>
+        </div>
+        <div class="filter-group">
+          <label for="descSelect">Description</label>
+          <select id="descSelect" class="filter"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div id="results">
+        <h2>Procedure Pricing Comparison</h2>
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Hospital</th>
+              <th>CPT Code</th>
+              <th>Description</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data for the table
+    const sampleData = [
+      {
+        hospital: 'City Hospital',
+        cpt: '99213',
+        description: 'Office visit, established patient',
+        price: 150.0,
+      },
+      {
+        hospital: 'City Hospital',
+        cpt: '99214',
+        description: 'Office visit, established patient, moderate complexity',
+        price: 225.0,
+      },
+      {
+        hospital: 'General Medical Center',
+        cpt: '99213',
+        description: 'Office visit, established patient',
+        price: 160.0,
+      },
+      {
+        hospital: 'General Medical Center',
+        cpt: '99215',
+        description: 'Office visit, established patient, high complexity',
+        price: 275.0,
+      },
+      {
+        hospital: 'MediCare Hospital',
+        cpt: '99213',
+        description: 'Office visit, established patient',
+        price: 145.0,
+      },
+      {
+        hospital: 'MediCare Hospital',
+        cpt: '99214',
+        description: 'Office visit, established patient, moderate complexity',
+        price: 210.0,
+      },
+    ];
+
+    // Initialize the filters and table when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+      init(sampleData);
+    });
+
+    // Initialize the filters and display table data
+    function init(data) {
+      initFilters(data);
+      updateDisplay(data);
+    }
+
+    // Initialize filters for Hospital, CPT, and Description
+    function initFilters(data) {
+      const hospitalSelect = document.getElementById('hospitalSelect');
+      const cptSelect = document.getElementById('cptSelect');
+      const descSelect = document.getElementById('descSelect');
+
+      const uniqueHospitals = [...new Set(data.map((item) => item.hospital))];
+      const uniqueCPTs = [...new Set(data.map((item) => item.cpt))];
+      const uniqueDescs = [...new Set(data.map((item) => item.description))];
+
+      populateDropdown(hospitalSelect, uniqueHospitals);
+      populateDropdown(cptSelect, uniqueCPTs);
+      populateDropdown(descSelect, uniqueDescs);
+
+      // Update display when a filter changes
+      document.querySelectorAll('.filter').forEach((filter) => {
+        filter.addEventListener('change', () => updateDisplay(data));
+      });
+    }
+
+    // Helper function to populate a dropdown
+    function populateDropdown(selectElement, items) {
+      // Add default option to show all items
+      selectElement.innerHTML = '<option value="">All</option>';
+      items.forEach((item) => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        selectElement.appendChild(option);
+      });
+    }
+
+    // Update the table display based on selected filters
+    function updateDisplay(data) {
+      const selectedHospital = document.getElementById('hospitalSelect').value;
+      const selectedCPT = document.getElementById('cptSelect').value;
+      const selectedDesc = document.getElementById('descSelect').value;
+
+      let filtered = data.filter(
+        (item) =>
+          (selectedHospital === '' || item.hospital === selectedHospital) &&
+          (selectedCPT === '' || item.cpt === selectedCPT) &&
+          (selectedDesc === '' || item.description === selectedDesc)
+      );
+
+      // Remove duplicates based on hospital, CPT, and description
+      filtered = filtered.filter((value, index, self) =>
+        index ===
+        self.findIndex(
+          (t) =>
+            t.hospital === value.hospital &&
+            t.cpt === value.cpt &&
+            t.description === value.description
+        )
+      );
+
+      updateResultsTable(filtered);
+    }
+
+    // Render the filtered results into the table
+    function updateResultsTable(filtered) {
+      const resultsBody = document.getElementById('resultsBody');
+      if (filtered.length === 0) {
+        resultsBody.innerHTML =
+          '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
+      } else {
+        resultsBody.innerHTML = filtered
+          .map(
+            (item) => `
+          <tr>
+            <td>${item.hospital}</td>
+            <td>${item.cpt}</td>
+            <td>${item.description}</td>
+            <td>$${item.price.toFixed(2)}</td>
+          </tr>
+        `
+          )
+          .join('');
+      }
+    }
+  </script>
 </body>
 </html>

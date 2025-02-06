@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HealthRates</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Load Suranna font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Suranna&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Global Styles */
+    /* Global Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,7 +15,7 @@
     }
     
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Suranna', serif;
       background-color: #fff;
       color: #333;
     }
@@ -95,7 +96,7 @@
       background-color: #ffe6f0;
     }
     
-    /* Main Content Area (Filters & Results) */
+    /* Content: Filters & Results */
     .content {
       display: flex;
       gap: 20px;
@@ -104,7 +105,7 @@
     
     /* Sidebar Filters */
     .sidebar {
-      background-color: #fff0f5; /* very light pink */
+      background-color: #fff0f5; /* Very light pink */
       border-radius: 8px;
       padding: 20px;
       flex: 1;
@@ -246,52 +247,18 @@
   <script>
     // Sample data for the table
     const sampleData = [
-      {
-        hospital: 'City Hospital',
-        cpt: '99213',
-        description: 'Office visit, established patient',
-        price: 150.0,
-      },
-      {
-        hospital: 'City Hospital',
-        cpt: '99214',
-        description: 'Office visit, established patient, moderate complexity',
-        price: 225.0,
-      },
-      {
-        hospital: 'General Medical Center',
-        cpt: '99213',
-        description: 'Office visit, established patient',
-        price: 160.0,
-      },
-      {
-        hospital: 'General Medical Center',
-        cpt: '99215',
-        description: 'Office visit, established patient, high complexity',
-        price: 275.0,
-      },
-      {
-        hospital: 'MediCare Hospital',
-        cpt: '99213',
-        description: 'Office visit, established patient',
-        price: 145.0,
-      },
-      {
-        hospital: 'MediCare Hospital',
-        cpt: '99214',
-        description: 'Office visit, established patient, moderate complexity',
-        price: 210.0,
-      },
+      { hospital: 'City Hospital', cpt: '99213', description: 'Office visit, established patient', price: 150.0 },
+      { hospital: 'City Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 225.0 },
+      { hospital: 'General Medical Center', cpt: '99213', description: 'Office visit, established patient', price: 160.0 },
+      { hospital: 'General Medical Center', cpt: '99215', description: 'Office visit, established patient, high complexity', price: 275.0 },
+      { hospital: 'MediCare Hospital', cpt: '99213', description: 'Office visit, established patient', price: 145.0 },
+      { hospital: 'MediCare Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 210.0 }
     ];
     
-    // Initialize all functionality when DOM is loaded
+    // Initialize functionality when the DOM is loaded
     document.addEventListener('DOMContentLoaded', function () {
       init(sampleData);
-      
-      // Add event listener for the separate search button
-      document.getElementById('searchButton').addEventListener('click', function() {
-        updateDisplay(sampleData);
-      });
+      document.getElementById('searchButton').addEventListener('click', () => updateDisplay(sampleData));
     });
     
     // Initialize filters (dropdowns) and display table data
@@ -300,7 +267,7 @@
       updateDisplay(data);
     }
     
-    // Initialize dropdown filters with unique values from sampleData
+    // Populate dropdowns with unique values from sampleData
     function initFilters(data) {
       const hospitalSelect = document.getElementById('hospitalSelect');
       const cptSelect = document.getElementById('cptSelect');
@@ -314,15 +281,13 @@
       populateDropdown(cptSelect, uniqueCPTs);
       populateDropdown(descSelect, uniqueDescs);
       
-      // Update display when a dropdown filter changes
       document.querySelectorAll('.filter').forEach(filter => {
         filter.addEventListener('change', () => updateDisplay(data));
       });
     }
     
-    // Helper function to populate a dropdown with options
+    // Helper function to populate a dropdown
     function populateDropdown(selectElement, items) {
-      // Add default option for "All"
       selectElement.innerHTML = '<option value="">All</option>';
       items.forEach(item => {
         const option = document.createElement('option');
@@ -332,33 +297,25 @@
       });
     }
     
-    // Update the table display based on search inputs and dropdown filters
+    // Filter the data and update the results table
     function updateDisplay(data) {
-      // Get values from dropdown filters
       const selectedHospital = document.getElementById('hospitalSelect').value;
       const selectedCPT = document.getElementById('cptSelect').value;
       const selectedDesc = document.getElementById('descSelect').value;
-      
-      // Get values from search inputs (trim and convert to lowercase for case-insensitive matching)
       const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
       const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
       
       let filtered = data.filter(item => {
-        // Check dropdown filters (if selected, the item must match exactly)
-        const matchDropdown =
+        const dropdownMatch =
           (selectedHospital === '' || item.hospital === selectedHospital) &&
           (selectedCPT === '' || item.cpt === selectedCPT) &&
           (selectedDesc === '' || item.description === selectedDesc);
-        
-        // Check search inputs (if provided, item field must include the search string)
-        const matchSearch =
+        const searchMatch =
           (cptSearch === '' || item.cpt.toLowerCase().includes(cptSearch)) &&
           (hospitalSearch === '' || item.hospital.toLowerCase().includes(hospitalSearch));
-        
-        return matchDropdown && matchSearch;
+        return dropdownMatch && searchMatch;
       });
       
-      // Remove duplicate rows if needed (based on hospital, CPT, and description)
       filtered = filtered.filter((value, index, self) =>
         index === self.findIndex(t =>
           t.hospital === value.hospital &&

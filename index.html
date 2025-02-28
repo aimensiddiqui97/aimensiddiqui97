@@ -1,86 +1,39 @@
-<script>
-  // Initialize functionality when the DOM is loaded
-  document.addEventListener('DOMContentLoaded', function () {
-    // Fetch data from the server and initialize the page
-    fetchDataAndInit();
-    document.getElementById('searchButton').addEventListener('click', updateDisplay);
-  });
+<!-- Firebase SDK Imports -->
+<script type="module">
+  // Import the necessary Firebase modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDgsxa1uEHd2sF9RdqZitD1TDnlRaqxfP0",
+    authDomain: "healthcare-rates-f9816.firebaseapp.com",
+    projectId: "healthcare-rates-f9816",
+    storageBucket: "healthcare-rates-f9816.firebasestorage.app",
+    messagingSenderId: "105946929877",
+    appId: "1:105946929877:web:0e7ef8c2ed2d149586605c",
+    measurementId: "G-BFX35FSJ4C"
+  };
 
-  // Fetch data from the server and initialize filters and table
-  function fetchDataAndInit() {
-    const url = 'https://aimensiddiqui97.github.io/aimensiddiqui97/getData.php'; // Replace with your server endpoint
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        init(data); // Initialize filters and table with fetched data
-      })
-      .catch(error => console.error("Error fetching data:", error));
-  }
+  // Initialize Firestore
+  const db = getFirestore(app);
 
-  // Initialize filters (dropdowns) and display table data
-  function init(data) {
-    initFilters(data);
-    updateResultsTable(data);
-  }
-
-  // Populate dropdowns with unique values from fetched data
-  function initFilters(data) {
-    const hospitalSelect = document.getElementById('hospitalSelect');
-    const cptSelect = document.getElementById('cptSelect');
-    const descSelect = document.getElementById('descSelect');
-
-    const uniqueHospitals = [...new Set(data.map(item => item.hospital))];
-    const uniqueCPTs = [...new Set(data.map(item => item.cpt))];
-    const uniqueDescs = [...new Set(data.map(item => item.description))];
-
-    populateDropdown(hospitalSelect, uniqueHospitals);
-    populateDropdown(cptSelect, uniqueCPTs);
-    populateDropdown(descSelect, uniqueDescs);
-
-    document.querySelectorAll('.filter').forEach(filter => {
-      filter.addEventListener('change', () => updateDisplay(data));
-    });
-  }
-
-  // Helper function to populate a dropdown
-  function populateDropdown(selectElement, items) {
-    selectElement.innerHTML = '<option value="">All</option>';
-    items.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item;
-      option.textContent = item;
-      selectElement.appendChild(option);
-    });
-  }
-
-  // Fetch data from the server based on search inputs and update the results table
-  function updateDisplay() {
-    const cptSearch = document.getElementById('cptSearch').value.trim();
-    const hospitalSearch = document.getElementById('hospitalSearch').value.trim();
-
-    const url = `https://aimensiddiqui97.github.io/aimensiddiqui97/search.php?cpt=${cptSearch}&hospital=${hospitalSearch}`;
-
-    fetch(url)
-      .then(response => response.json())
-      .then(data => updateResultsTable(data))
-      .catch(error => console.error("Error fetching data:", error));
-  }
-
-  // Render the filtered results into the table
-  function updateResultsTable(filtered) {
-    const resultsBody = document.getElementById('resultsBody');
-    if (filtered.length === 0) {
-      resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
-    } else {
-      resultsBody.innerHTML = filtered.map(item => `
-        <tr>
-          <td>${item.hospital}</td>
-          <td>${item.cpt}</td>
-          <td>${item.description}</td>
-          <td>$${item.price.toFixed(2)}</td>
-        </tr>
-      `).join('');
+  // Fetch data from Firestore
+  async function fetchData() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "healthRates"));
+      const data = querySnapshot.docs.map(doc => doc.data());
+      return data;
+    } catch (error) {
+      console.error("Error fetching data from Firestore:", error);
+      return [];
     }
   }
-</script>
+  
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function () {
+    init();
+    document.getElementById('searchButton').addEventListener('click',

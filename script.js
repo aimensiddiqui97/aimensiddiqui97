@@ -6,7 +6,7 @@ function init() {
 
 // Fetch data from the backend
 function fetchDataAndInitialize() {
-    fetch("http://yourserver.com/search.php") // Replace with your backend URL
+    fetch("https://aimensiddiqui97.github.io/aimensiddiqui97/search.php") // Replace with your backend URL
         .then(response => response.json())
         .then(data => {
             initFilters(data);
@@ -52,7 +52,7 @@ function updateDisplay() {
     const selectedCPT = document.getElementById('cptSelect').value;
     const selectedDesc = document.getElementById('descSelect').value;
 
-    const url = `http://yourserver.com/search.php?cpt=${selectedCPT}&hospital=${selectedHospital}&desc=${selectedDesc}`;
+    const url = `https://aimensiddiqui97.github.io/aimensiddiqui97/search.php?cpt=${selectedCPT}&hospital=${selectedHospital}&desc=${selectedDesc}`;
 
     fetch(url)
         .then(response => response.json())

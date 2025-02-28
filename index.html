@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -332,14 +333,14 @@
       if (filtered.length === 0) {
         resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
       } else {
-        resultsBody.innerHTML = filtered.map(item => 
+        resultsBody.innerHTML = filtered.map(item => `
           <tr>
             <td>${item.hospital}</td>
             <td>${item.cpt}</td>
             <td>${item.description}</td>
             <td>$${item.price.toFixed(2)}</td>
           </tr>
-        ).join('');
+        `).join('');
       }
     }
   </script>

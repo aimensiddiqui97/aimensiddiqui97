@@ -1,129 +1,162 @@
-<!-- Firebase SDK Imports -->
-// Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Rates</title>
+  <!-- Firebase SDK Imports -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDgsxa1uEHd2sF9RdqZitD1TDnlRaqxfP0",
-  authDomain: "healthcare-rates-f9816.firebaseapp.com",
-  projectId: "healthcare-rates-f9816",
-  storageBucket: "healthcare-rates-f9816.firebasestorage.app",
-  messagingSenderId: "105946929877",
-  appId: "1:105946929877:web:0e7ef8c2ed2d149586605c",
-  measurementId: "G-BFX35FSJ4C"
-};
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDgsxa1uEHd2sF9RdqZitD1TDnlRaqxfP0",
+      authDomain: "healthcare-rates-f9816.firebaseapp.com",
+      projectId: "healthcare-rates-f9816",
+      storageBucket: "healthcare-rates-f9816.firebasestorage.app",
+      messagingSenderId: "105946929877",
+      appId: "1:105946929877:web:0e7ef8c2ed2d149586605c",
+      measurementId: "G-BFX35FSJ4C"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // Initialize Firestore
-  const db = getFirestore(app);
-
-  // Fetch data from Firestore
-  async function fetchData() {
-    try {
-      const querySnapshot = await getDocs(collection(db, "healthRates"));
-      const data = querySnapshot.docs.map(doc => doc.data());
-      return data;
-    } catch (error) {
-      console.error("Error fetching data from Firestore:", error);
-      return [];
+    // Fetch Data from Firestore
+    async function fetchData() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "healthRates"));
+        const data = querySnapshot.docs.map(doc => doc.data());
+        return data;
+      } catch (error) {
+        console.error("Error fetching data from Firestore:", error);
+        return [];
+      }
     }
-  }
-  
-  // Wait for the DOM to be fully loaded
-  document.addEventListener('DOMContentLoaded', function () {
-    init();
-    document.getElementById('searchButton').addEventListener('click', () => updateDisplay());
-  });
 
-  // Initialize the page with data
-  async function init() {
-    const data = await fetchData();
-    initFilters(data);
-    updateDisplay(data);
-  }
-
-  // Initialize filters (dropdowns) and display table data
-  function initFilters(data) {
-    const hospitalSelect = document.getElementById('hospitalSelect');
-    const cptSelect = document.getElementById('cptSelect');
-    const descSelect = document.getElementById('descSelect');
-
-    const uniqueHospitals = [...new Set(data.map(item => item.hospital))];
-    const uniqueCPTs = [...new Set(data.map(item => item.cpt))];
-    const uniqueDescs = [...new Set(data.map(item => item.description))];
-
-    populateDropdown(hospitalSelect, uniqueHospitals);
-    populateDropdown(cptSelect, uniqueCPTs);
-    populateDropdown(descSelect, uniqueDescs);
-
-    document.querySelectorAll('.filter').forEach(filter => {
-      filter.addEventListener('change', () => updateDisplay(data));
-    });
-  }
-
-  // Populate dropdowns with unique values from data
-  function populateDropdown(selectElement, items) {
-    selectElement.innerHTML = '<option value="">All</option>';
-    items.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item;
-      option.textContent = item;
-      selectElement.appendChild(option);
-    });
-  }
-
-  // Filter and display data
-  async function updateDisplay() {
-    const data = await fetchData();
-    const selectedHospital = document.getElementById('hospitalSelect').value;
-    const selectedCPT = document.getElementById('cptSelect').value;
-    const selectedDesc = document.getElementById('descSelect').value;
-    const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
-    const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
-
-    let filtered = data.filter(item => {
-      const dropdownMatch =
-        (selectedHospital === '' || item.hospital === selectedHospital) &&
-        (selectedCPT === '' || item.cpt === selectedCPT) &&
-        (selectedDesc === '' || item.description === selectedDesc);
-      const searchMatch =
-        (cptSearch === '' || item.cpt.toLowerCase().includes(cptSearch)) &&
-        (hospitalSearch === '' || item.hospital.toLowerCase().includes(hospitalSearch));
-      return dropdownMatch && searchMatch;
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function () {
+      init();
+      document.getElementById('searchButton').addEventListener('click', updateDisplay);
     });
 
-    filtered = filtered.filter((value, index, self) =>
-      index === self.findIndex(t =>
-        t.hospital === value.hospital &&
-        t.cpt === value.cpt &&
-        t.description === value.description
-      )
-    );
-
-    updateResultsTable(filtered);
-  }
-
-  // Render the filtered results into the table
-  function updateResultsTable(filtered) {
-    const resultsBody = document.getElementById('resultsBody');
-    if (filtered.length === 0) {
-      resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
-    } else {
-      resultsBody.innerHTML = filtered.map(item => 
-        `<tr>
-          <td>${item.hospital}</td>
-          <td>${item.cpt}</td>
-          <td>${item.description}</td>
-          <td>$${item.price.toFixed(2)}</td>
-        </tr>`
-      ).join('');
+    // Initialize the page with data
+    async function init() {
+      const data = await fetchData();
+      initFilters(data);
+      updateDisplay(data);
     }
-  }
-</script>
+
+    // Initialize filters (dropdowns) and display table data
+    function initFilters(data) {
+      const hospitalSelect = document.getElementById('hospitalSelect');
+      const cptSelect = document.getElementById('cptSelect');
+      const descSelect = document.getElementById('descSelect');
+
+      const uniqueHospitals = [...new Set(data.map(item => item.hospital))];
+      const uniqueCPTs = [...new Set(data.map(item => item.cpt))];
+      const uniqueDescs = [...new Set(data.map(item => item.description))];
+
+      populateDropdown(hospitalSelect, uniqueHospitals);
+      populateDropdown(cptSelect, uniqueCPTs);
+      populateDropdown(descSelect, uniqueDescs);
+
+      document.querySelectorAll('.filter').forEach(filter => {
+        filter.addEventListener('change', () => updateDisplay(data));
+      });
+    }
+
+    // Populate dropdowns with unique values from data
+    function populateDropdown(selectElement, items) {
+      selectElement.innerHTML = '<option value="">All</option>';
+      items.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        selectElement.appendChild(option);
+      });
+    }
+
+    // Filter and display data
+    async function updateDisplay() {
+      const data = await fetchData();
+      const selectedHospital = document.getElementById('hospitalSelect').value;
+      const selectedCPT = document.getElementById('cptSelect').value;
+      const selectedDesc = document.getElementById('descSelect').value;
+      const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
+      const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
+
+      let filtered = data.filter(item => {
+        const dropdownMatch =
+          (selectedHospital === '' || item.hospital === selectedHospital) &&
+          (selectedCPT === '' || item.cpt === selectedCPT) &&
+          (selectedDesc === '' || item.description === selectedDesc);
+        const searchMatch =
+          (cptSearch === '' || item.cpt.toLowerCase().includes(cptSearch)) &&
+          (hospitalSearch === '' || item.hospital.toLowerCase().includes(hospitalSearch));
+        return dropdownMatch && searchMatch;
+      });
+
+      // Remove duplicate entries based on hospital, cpt, and description
+      filtered = filtered.filter((value, index, self) =>
+        index === self.findIndex(t =>
+          t.hospital === value.hospital &&
+          t.cpt === value.cpt &&
+          t.description === value.description
+        )
+      );
+
+      updateResultsTable(filtered);
+    }
+
+    // Render the filtered results into the table
+    function updateResultsTable(filtered) {
+      const resultsBody = document.getElementById('resultsBody');
+      if (filtered.length === 0) {
+        resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
+      } else {
+        resultsBody.innerHTML = filtered.map(item => 
+          `<tr>
+            <td>${item.hospital}</td>
+            <td>${item.cpt}</td>
+            <td>${item.description}</td>
+            <td>$${item.price ? item.price.toFixed(2) : 'N/A'}</td>
+          </tr>`
+        ).join('');
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Healthcare Rate Finder</h1>
+
+  <!-- Filters -->
+  <div>
+    <select id="hospitalSelect" class="filter"></select>
+    <select id="cptSelect" class="filter"></select>
+    <select id="descSelect" class="filter"></select>
+  </div>
+
+  <!-- Search fields -->
+  <input type="text" id="cptSearch" placeholder="Search by CPT">
+  <input type="text" id="hospitalSearch" placeholder="Search by Hospital">
+  <button id="searchButton">Search</button>
+
+  <!-- Table to display results -->
+  <table>
+    <thead>
+      <tr>
+        <th>Hospital</th>
+        <th>CPT</th>
+        <th>Description</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody id="resultsBody">
+      <!-- Data rows will be inserted here -->
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,6 +1,6 @@
 <?php
 // Connect to the database
-$conn = new mysqli("Users/aimenusuf/Downloads/Untitled.sqlite", "aimensiddiqui97@gmail.com", "@Siddiqui97", "Untitled.sqlite");
+$conn = new mysqli("Users/aimenusuf/Downloads/Untitled.sqlite", "aimensiddiqui97@gmail.com", "Untitled.sqlite");
 
 // Check connection
 if ($conn->connect_error) {

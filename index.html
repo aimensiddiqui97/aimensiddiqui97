@@ -8,7 +8,7 @@
 
   // Fetch data from the server and initialize filters and table
   function fetchDataAndInit() {
-    const url = 'https://aimensiddiqui97.github.io/aimensiddiqui97/search.php'; // Replace with your server endpoint
+    const url = 'https://aimensiddiqui97.github.io/aimensiddiqui97/getData.php'; // Replace with your server endpoint
 
     fetch(url)
       .then(response => response.json())
@@ -59,7 +59,7 @@
     const cptSearch = document.getElementById('cptSearch').value.trim();
     const hospitalSearch = document.getElementById('hospitalSearch').value.trim();
 
-    const url = `'https://aimensiddiqui97.github.io/aimensiddiqui97/search.php?cpt=${cptSearch}&hospital=${hospitalSearch}`;
+    const url = `https://aimensiddiqui97.github.io/aimensiddiqui97/search.php?cpt=${cptSearch}&hospital=${hospitalSearch}`;
 
     fetch(url)
       .then(response => response.json())

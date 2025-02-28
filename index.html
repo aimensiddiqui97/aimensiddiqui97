@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HealthRates</title>
-  <!-- Load Suranna font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Suranna&display=swap" rel="stylesheet">
   <style>
     /* Global Styles */
@@ -29,7 +28,7 @@
     
     /* Top Pink Bar */
     .top-bar {
-      background-color: #ff1493; /* Vivid pink */
+      background-color: #ff1493; 
       color: #fff;
       padding: 15px 30px;
       display: flex;
@@ -48,7 +47,7 @@
     
     /* Secondary Lighter Pink Bar */
     .sub-bar {
-      background-color: #ffb6c1; /* Light pink */
+      background-color: #ffb6c1;
       color: #fff;
       padding: 10px 30px;
       text-align: center;
@@ -58,7 +57,7 @@
     
     /* Search Area (Pink) */
     .search-area {
-      background-color: #ff69b4; /* Regular pink */
+      background-color: #ff69b4;
       padding: 20px;
       text-align: center;
     }
@@ -105,7 +104,7 @@
     
     /* Sidebar Filters */
     .sidebar {
-      background-color: #fff0f5; /* Very light pink */
+      background-color: #fff0f5;
       border-radius: 8px;
       padding: 20px;
       flex: 1;
@@ -244,49 +243,47 @@
     </div>
   </section>
   
+  <!-- File Input to Load Database -->
+  <input type="file" id="fileInput" />
+  
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.0/sql-wasm.js"></script>
   <script>
-    // Sample data for the table
-    const sampleData = [
-      { hospital: 'City Hospital', cpt: '99213', description: 'Office visit, established patient', price: 150.0 },
-      { hospital: 'City Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 225.0 },
-      { hospital: 'General Medical Center', cpt: '99213', description: 'Office visit, established patient', price: 160.0 },
-      { hospital: 'General Medical Center', cpt: '99215', description: 'Office visit, established patient, high complexity', price: 275.0 },
-      { hospital: 'MediCare Hospital', cpt: '99213', description: 'Office visit, established patient', price: 145.0 },
-      { hospital: 'MediCare Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 210.0 }
-    ];
-    
-    // Initialize functionality when the DOM is loaded
-    document.addEventListener('DOMContentLoaded', function () {
-      init(sampleData);
-      document.getElementById('searchButton').addEventListener('click', () => updateDisplay(sampleData));
+    let db;
+
+    // Load the SQLite database when the user selects a file
+    document.getElementById('fileInput').addEventListener('change', async function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+          const buffer = e.target.result;
+          const SQL = await initSqlJs();
+          db = new SQL.Database(new Uint8Array(buffer));
+          console.log("Database loaded successfully!");
+          initFilters();  // Initialize filters after database is loaded
+        };
+        reader.readAsArrayBuffer(file);
+      }
     });
-    
-    // Initialize filters (dropdowns) and display table data
-    function init(data) {
-      initFilters(data);
-      updateDisplay(data);
-    }
-    
-    // Populate dropdowns with unique values from sampleData
-    function initFilters(data) {
+
+    // Initialize filters for dropdowns
+    function initFilters() {
       const hospitalSelect = document.getElementById('hospitalSelect');
       const cptSelect = document.getElementById('cptSelect');
       const descSelect = document.getElementById('descSelect');
       
-      const uniqueHospitals = [...new Set(data.map(item => item.hospital))];
-      const uniqueCPTs = [...new Set(data.map(item => item.cpt))];
-      const uniqueDescs = [...new Set(data.map(item => item.description))];
-      
-      populateDropdown(hospitalSelect, uniqueHospitals);
-      populateDropdown(cptSelect, uniqueCPTs);
-      populateDropdown(descSelect, uniqueDescs);
-      
-      document.querySelectorAll('.filter').forEach(filter => {
-        filter.addEventListener('change', () => updateDisplay(data));
-      });
+      // Query to fetch unique values for filters
+      const hospitals = db.exec("SELECT DISTINCT hospital FROM procedures");
+      const cpts = db.exec("SELECT DISTINCT cpt_code FROM procedures");
+      const descriptions = db.exec("SELECT DISTINCT description FROM procedures");
+
+      populateDropdown(hospitalSelect, hospitals[0].values.map(row => row[0]));
+      populateDropdown(cptSelect, cpts[0].values.map(row => row[0]));
+      populateDropdown(descSelect, descriptions[0].values.map(row => row[0]));
     }
-    
-    // Helper function to populate a dropdown
+
+    // Helper function to populate dropdowns
     function populateDropdown(selectElement, items) {
       selectElement.innerHTML = '<option value="">All</option>';
       items.forEach(item => {
@@ -296,49 +293,44 @@
         selectElement.appendChild(option);
       });
     }
-    
-    // Filter the data and update the results table
-    function updateDisplay(data) {
+
+    // Search and filter the database
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
+      const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
       const selectedHospital = document.getElementById('hospitalSelect').value;
       const selectedCPT = document.getElementById('cptSelect').value;
       const selectedDesc = document.getElementById('descSelect').value;
-      const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
-      const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
+
+      const query = `
+        SELECT hospital, cpt_code, description, price 
+        FROM procedures 
+        WHERE (cpt_code LIKE ? OR ? = '') 
+        AND (hospital LIKE ? OR ? = '') 
+        AND (description LIKE ? OR ? = '')
+      `;
       
-      let filtered = data.filter(item => {
-        const dropdownMatch =
-          (selectedHospital === '' || item.hospital === selectedHospital) &&
-          (selectedCPT === '' || item.cpt === selectedCPT) &&
-          (selectedDesc === '' || item.description === selectedDesc);
-        const searchMatch =
-          (cptSearch === '' || item.cpt.toLowerCase().includes(cptSearch)) &&
-          (hospitalSearch === '' || item.hospital.toLowerCase().includes(hospitalSearch));
-        return dropdownMatch && searchMatch;
-      });
-      
-      filtered = filtered.filter((value, index, self) =>
-        index === self.findIndex(t =>
-          t.hospital === value.hospital &&
-          t.cpt === value.cpt &&
-          t.description === value.description
-        )
-      );
-      
-      updateResultsTable(filtered);
-    }
-    
-    // Render the filtered results into the table
-    function updateResultsTable(filtered) {
+      const results = db.exec(query, [
+        `%${cptSearch}%`, cptSearch,
+        `%${hospitalSearch}%`, hospitalSearch,
+        `%${selectedDesc}%`, selectedDesc
+      ]);
+
+      updateResultsTable(results[0].values);
+    });
+
+    // Update the table with filtered results
+    function updateResultsTable(results) {
       const resultsBody = document.getElementById('resultsBody');
-      if (filtered.length === 0) {
+      if (results.length === 0) {
         resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
       } else {
-        resultsBody.innerHTML = filtered.map(item => `
+        resultsBody.innerHTML = results.map(item => `
           <tr>
-            <td>${item.hospital}</td>
-            <td>${item.cpt}</td>
-            <td>${item.description}</td>
-            <td>$${item.price.toFixed(2)}</td>
+            <td>${item[0]}</td>
+            <td>${item[1]}</td>
+            <td>${item[2]}</td>
+            <td>$${item[3].toFixed(2)}</td>
           </tr>
         `).join('');
       }

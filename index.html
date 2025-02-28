@@ -1,348 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HealthRates</title>
-  <!-- Load Suranna font from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Suranna&display=swap" rel="stylesheet">
-  <style>
-    /* Global Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'Suranna', serif;
-      background-color: #fff;
-      color: #333;
-    }
-    
-    a {
-      color: inherit;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: 500;
-    }
-    
-    /* Top Pink Bar */
-    .top-bar {
-      background-color: #ff1493; /* Vivid pink */
-      color: #fff;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .top-bar .logo {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    
-    .top-bar .auth-links {
-      font-size: 1rem;
-    }
-    
-    /* Secondary Lighter Pink Bar */
-    .sub-bar {
-      background-color: #ffb6c1; /* Light pink */
-      color: #fff;
-      padding: 10px 30px;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: 500;
-    }
-    
-    /* Search Area (Pink) */
-    .search-area {
-      background-color: #ff69b4; /* Regular pink */
-      padding: 20px;
-      text-align: center;
-    }
-    
-    .search-area .search-container {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    
-    .search-area input[type="text"] {
-      padding: 10px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 4px;
-      width: 250px;
-    }
-    
-    .search-area button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      background-color: #fff;
-      color: #ff69b4;
-      transition: background-color 0.3s;
-    }
-    
-    .search-area button:hover {
-      background-color: #ffe6f0;
-    }
-    
-    /* Content: Filters & Results */
-    .content {
-      display: flex;
-      gap: 20px;
-      padding: 30px;
-    }
-    
-    /* Sidebar Filters */
-    .sidebar {
-      background-color: #fff0f5; /* Very light pink */
-      border-radius: 8px;
-      padding: 20px;
-      flex: 1;
-      min-width: 250px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      height: fit-content;
-    }
-    
-    .filters {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    
-    .filter-group label {
-      font-weight: 600;
-      margin-bottom: 5px;
-      display: block;
-    }
-    
-    .filter-group select {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #dcdcdc;
-      font-size: 1rem;
-      width: 100%;
-    }
-    
-    /* Results Table */
-    .results-container {
-      flex: 3;
-    }
-    
-    .results-container h2 {
-      font-size: 1.5rem;
-      color: #2f2f2f;
-      margin-bottom: 1rem;
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    th,
-    td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #f4f7fa;
-    }
-    
-    th {
-      background-color: #ff1493;
-      color: #fff;
-    }
-    
-    tr:hover {
-      background-color: #fff0f5;
-    }
-    
-    .no-results {
-      text-align: center;
-      padding: 20px;
-      color: #666;
-    }
-    
-    /* Responsive */
-    @media (max-width: 800px) {
-      .content {
-        flex-direction: column;
-      }
-    }
-  </style>
-</head>
-<body>
-  <!-- Top Bar -->
-  <header class="top-bar">
-    <div class="logo">HealthRates</div>
-    <div class="auth-links">
-      <a href="#">Sign Up</a>
-      <a href="#">Sign In</a>
-    </div>
-  </header>
-  
-  <!-- Secondary Bar -->
-  <div class="sub-bar">
-    Transparency for all
-  </div>
-  
-  <!-- Search Area -->
-  <section class="search-area">
-    <div class="search-container">
-      <input type="text" id="cptSearch" placeholder="Search by CPT code..." />
-      <input type="text" id="hospitalSearch" placeholder="Search by Hospital name..." />
-      <button type="button" id="searchButton">Search</button>
-    </div>
-  </section>
-  
-  <!-- Content: Filters and Results -->
-  <section class="content">
-    <!-- Sidebar Filters -->
-    <aside class="sidebar">
-      <div class="filters">
-        <div class="filter-group">
-          <label for="hospitalSelect">Filter by Hospital</label>
-          <select id="hospitalSelect" class="filter"></select>
-        </div>
-        <div class="filter-group">
-          <label for="cptSelect">Filter by CPT Code</label>
-          <select id="cptSelect" class="filter"></select>
-        </div>
-        <div class="filter-group">
-          <label for="descSelect">Filter by Description</label>
-          <select id="descSelect" class="filter"></select>
-        </div>
-      </div>
-    </aside>
-    
-    <!-- Results Table -->
-    <div class="results-container">
-      <h2>Procedure Pricing Comparison</h2>
-      <table class="results-table">
-        <thead>
-          <tr>
-            <th>Hospital</th>
-            <th>CPT Code</th>
-            <th>Description</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody id="resultsBody"></tbody>
-      </table>
-    </div>
-  </section>
-  
-  <script>
-    // Sample data for the table
-    const sampleData = [
-      { hospital: 'City Hospital', cpt: '99213', description: 'Office visit, established patient', price: 150.0 },
-      { hospital: 'City Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 225.0 },
-      { hospital: 'General Medical Center', cpt: '99213', description: 'Office visit, established patient', price: 160.0 },
-      { hospital: 'General Medical Center', cpt: '99215', description: 'Office visit, established patient, high complexity', price: 275.0 },
-      { hospital: 'MediCare Hospital', cpt: '99213', description: 'Office visit, established patient', price: 145.0 },
-      { hospital: 'MediCare Hospital', cpt: '99214', description: 'Office visit, established patient, moderate complexity', price: 210.0 }
-    ];
-    
-    // Initialize functionality when the DOM is loaded
-    document.addEventListener('DOMContentLoaded', function () {
-      init(sampleData);
-      document.getElementById('searchButton').addEventListener('click', () => updateDisplay(sampleData));
+<script>
+  // Initialize functionality when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', function () {
+    // Fetch data from the server and initialize the page
+    fetchDataAndInit();
+    document.getElementById('searchButton').addEventListener('click', updateDisplay);
+  });
+
+  // Fetch data from the server and initialize filters and table
+  function fetchDataAndInit() {
+    const url = 'https://aimensiddiqui97.github.io/aimensiddiqui97/search.php'; // Replace with your server endpoint
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        init(data); // Initialize filters and table with fetched data
+      })
+      .catch(error => console.error("Error fetching data:", error));
+  }
+
+  // Initialize filters (dropdowns) and display table data
+  function init(data) {
+    initFilters(data);
+    updateResultsTable(data);
+  }
+
+  // Populate dropdowns with unique values from fetched data
+  function initFilters(data) {
+    const hospitalSelect = document.getElementById('hospitalSelect');
+    const cptSelect = document.getElementById('cptSelect');
+    const descSelect = document.getElementById('descSelect');
+
+    const uniqueHospitals = [...new Set(data.map(item => item.hospital))];
+    const uniqueCPTs = [...new Set(data.map(item => item.cpt))];
+    const uniqueDescs = [...new Set(data.map(item => item.description))];
+
+    populateDropdown(hospitalSelect, uniqueHospitals);
+    populateDropdown(cptSelect, uniqueCPTs);
+    populateDropdown(descSelect, uniqueDescs);
+
+    document.querySelectorAll('.filter').forEach(filter => {
+      filter.addEventListener('change', () => updateDisplay(data));
     });
-    
-    // Initialize filters (dropdowns) and display table data
-    function init(data) {
-      initFilters(data);
-      updateDisplay(data);
+  }
+
+  // Helper function to populate a dropdown
+  function populateDropdown(selectElement, items) {
+    selectElement.innerHTML = '<option value="">All</option>';
+    items.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item;
+      option.textContent = item;
+      selectElement.appendChild(option);
+    });
+  }
+
+  // Fetch data from the server based on search inputs and update the results table
+  function updateDisplay() {
+    const cptSearch = document.getElementById('cptSearch').value.trim();
+    const hospitalSearch = document.getElementById('hospitalSearch').value.trim();
+
+    const url = `'https://aimensiddiqui97.github.io/aimensiddiqui97/search.php?cpt=${cptSearch}&hospital=${hospitalSearch}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => updateResultsTable(data))
+      .catch(error => console.error("Error fetching data:", error));
+  }
+
+  // Render the filtered results into the table
+  function updateResultsTable(filtered) {
+    const resultsBody = document.getElementById('resultsBody');
+    if (filtered.length === 0) {
+      resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
+    } else {
+      resultsBody.innerHTML = filtered.map(item => `
+        <tr>
+          <td>${item.hospital}</td>
+          <td>${item.cpt}</td>
+          <td>${item.description}</td>
+          <td>$${item.price.toFixed(2)}</td>
+        </tr>
+      `).join('');
     }
-    
-    // Populate dropdowns with unique values from sampleData
-    function initFilters(data) {
-      const hospitalSelect = document.getElementById('hospitalSelect');
-      const cptSelect = document.getElementById('cptSelect');
-      const descSelect = document.getElementById('descSelect');
-      
-      const uniqueHospitals = [...new Set(data.map(item => item.hospital))];
-      const uniqueCPTs = [...new Set(data.map(item => item.cpt))];
-      const uniqueDescs = [...new Set(data.map(item => item.description))];
-      
-      populateDropdown(hospitalSelect, uniqueHospitals);
-      populateDropdown(cptSelect, uniqueCPTs);
-      populateDropdown(descSelect, uniqueDescs);
-      
-      document.querySelectorAll('.filter').forEach(filter => {
-        filter.addEventListener('change', () => updateDisplay(data));
-      });
-    }
-    
-    // Helper function to populate a dropdown
-    function populateDropdown(selectElement, items) {
-      selectElement.innerHTML = '<option value="">All</option>';
-      items.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item;
-        option.textContent = item;
-        selectElement.appendChild(option);
-      });
-    }
-    
-    // Filter the data and update the results table
-    function updateDisplay(data) {
-      const selectedHospital = document.getElementById('hospitalSelect').value;
-      const selectedCPT = document.getElementById('cptSelect').value;
-      const selectedDesc = document.getElementById('descSelect').value;
-      const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
-      const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
-      
-      let filtered = data.filter(item => {
-        const dropdownMatch =
-          (selectedHospital === '' || item.hospital === selectedHospital) &&
-          (selectedCPT === '' || item.cpt === selectedCPT) &&
-          (selectedDesc === '' || item.description === selectedDesc);
-        const searchMatch =
-          (cptSearch === '' || item.cpt.toLowerCase().includes(cptSearch)) &&
-          (hospitalSearch === '' || item.hospital.toLowerCase().includes(hospitalSearch));
-        return dropdownMatch && searchMatch;
-      });
-      
-      filtered = filtered.filter((value, index, self) =>
-        index === self.findIndex(t =>
-          t.hospital === value.hospital &&
-          t.cpt === value.cpt &&
-          t.description === value.description
-        )
-      );
-      
-      updateResultsTable(filtered);
-    }
-    
-    // Render the filtered results into the table
-    function updateResultsTable(filtered) {
-      const resultsBody = document.getElementById('resultsBody');
-      if (filtered.length === 0) {
-        resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
-      } else {
-        resultsBody.innerHTML = filtered.map(item => `
-          <tr>
-            <td>${item.hospital}</td>
-            <td>${item.cpt}</td>
-            <td>${item.description}</td>
-            <td>$${item.price.toFixed(2)}</td>
-          </tr>
-        `).join('');
-      }
-    }
-  </script>
-</body>
-</html>
+  }
+</script>

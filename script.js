@@ -1,6 +1,7 @@
 // Initialize the page by fetching data from the backend
 function init() {
     fetchDataAndInitialize();
+    setInterval(fetchDataAndInitialize, 10000); // Auto-refresh every 10 seconds
 }
 
 // Fetch data from the backend
@@ -78,3 +79,4 @@ function updateResultsTable(filtered) {
 
 // Call init() to load data from the backend on page load
 init();
+

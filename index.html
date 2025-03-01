@@ -200,8 +200,8 @@
   <!-- Search Area -->
   <section class="search-area">
     <div class="search-container">
-      <input type="text" id="cptSearch" placeholder="Search by CPT code..." />
-      <input type="text" id="hospitalSearch" placeholder="Search by Hospital name..." />
+      <input type="text" id="drugTypeSearch" placeholder="Search by Drug Type..." />
+      <input type="text" id="unitOfMeasurementSearch" placeholder="Search by Unit of Measurement..." />
       <button type="button" id="searchButton">Search</button>
     </div>
   </section>
@@ -216,30 +216,34 @@
           <select id="hospitalSelect" class="filter"></select>
         </div>
         <div class="filter-group">
-          <label for="cptSelect">Filter by CPT Code</label>
-          <select id="cptSelect" class="filter"></select>
+          <label for="drugTypeSelect">Filter by Drug Type</label>
+          <select id="drugTypeSelect" class="filter"></select>
         </div>
         <div class="filter-group">
-          <label for="descSelect">Filter by Description</label>
-          <select id="descSelect" class="filter"></select>
+          <label for="unitOfMeasurementSelect">Filter by Unit of Measurement</label>
+          <select id="unitOfMeasurementSelect" class="filter"></select>
         </div>
       </div>
     </aside>
     
     <!-- Results Table -->
     <div class="results-container">
-      <h2>Procedure Pricing Comparison</h2>
+      <h2>Drug Price Comparison</h2>
       <table class="results-table">
         <thead>
           <tr>
             <th>Hospital</th>
-            <th>CPT Code</th>
-            <th>Description</th>
-            <th>Price</th>
+            <th>Drug Type</th>
+            <th>Unit of Measurement</th>
+            <th>Standard Charge Gross (Sussex)</th>
+            <th>Standard Charge Gross (Kent)</th>
+            <th>Standard Charge Discounted Cash (Sussex)</th>
+            <th>Standard Charge Discounted Cash (Kent)</th>
           </tr>
         </thead>
         <tbody id="resultsBody"></tbody>
       </table>
+      <canvas id="chargeComparisonChart" width="400" height="200"></canvas>
     </div>
   </section>
   
@@ -248,8 +252,11 @@
   
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.0/sql-wasm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     let db;
+    let sussexData = [];
+    let kentData = [];
 
     // Load the SQLite database when the user selects a file
     document.getElementById('fileInput').addEventListener('change', async function(event) {
@@ -270,17 +277,17 @@
     // Initialize filters for dropdowns
     function initFilters() {
       const hospitalSelect = document.getElementById('hospitalSelect');
-      const cptSelect = document.getElementById('cptSelect');
-      const descSelect = document.getElementById('descSelect');
+      const drugTypeSelect = document.getElementById('drugTypeSelect');
+      const unitOfMeasurementSelect = document.getElementById('unitOfMeasurementSelect');
       
       // Query to fetch unique values for filters
       const hospitals = db.exec("SELECT DISTINCT hospital FROM procedures");
-      const cpts = db.exec("SELECT DISTINCT cpt_code FROM procedures");
-      const descriptions = db.exec("SELECT DISTINCT description FROM procedures");
+      const drugTypes = db.exec("SELECT DISTINCT drug_type FROM procedures");
+      const unitsOfMeasurement = db.exec("SELECT DISTINCT unit_of_measurement FROM procedures");
 
       populateDropdown(hospitalSelect, hospitals[0].values.map(row => row[0]));
-      populateDropdown(cptSelect, cpts[0].values.map(row => row[0]));
-      populateDropdown(descSelect, descriptions[0].values.map(row => row[0]));
+      populateDropdown(drugTypeSelect, drugTypes[0].values.map(row => row[0]));
+      populateDropdown(unitOfMeasurementSelect, unitsOfMeasurement[0].values.map(row => row[0]));
     }
 
     // Helper function to populate dropdowns
@@ -296,24 +303,24 @@
 
     // Search and filter the database
     document.getElementById('searchButton').addEventListener('click', function() {
-      const cptSearch = document.getElementById('cptSearch').value.trim().toLowerCase();
-      const hospitalSearch = document.getElementById('hospitalSearch').value.trim().toLowerCase();
+      const drugTypeSearch = document.getElementById('drugTypeSearch').value.trim().toLowerCase();
+      const unitOfMeasurementSearch = document.getElementById('unitOfMeasurementSearch').value.trim().toLowerCase();
       const selectedHospital = document.getElementById('hospitalSelect').value;
-      const selectedCPT = document.getElementById('cptSelect').value;
-      const selectedDesc = document.getElementById('descSelect').value;
+      const selectedDrugType = document.getElementById('drugTypeSelect').value;
+      const selectedUnitOfMeasurement = document.getElementById('unitOfMeasurementSelect').value;
 
       const query = `
-        SELECT hospital, cpt_code, description, price 
+        SELECT hospital, drug_type, unit_of_measurement, price, price_discounted_cash 
         FROM procedures 
-        WHERE (cpt_code LIKE ? OR ? = '') 
-        AND (hospital LIKE ? OR ? = '') 
-        AND (description LIKE ? OR ? = '')
+        WHERE (drug_type LIKE ? OR ? = '') 
+        AND (unit_of_measurement LIKE ? OR ? = '') 
+        AND (hospital LIKE ? OR ? = '')
       `;
       
       const results = db.exec(query, [
-        `%${cptSearch}%`, cptSearch,
-        `%${hospitalSearch}%`, hospitalSearch,
-        `%${selectedDesc}%`, selectedDesc
+        `%${drugTypeSearch}%`, drugTypeSearch,
+        `%${unitOfMeasurementSearch}%`, unitOfMeasurementSearch,
+        `%${selectedHospital}%`, selectedHospital
       ]);
 
       updateResultsTable(results[0].values);
@@ -323,7 +330,7 @@
     function updateResultsTable(results) {
       const resultsBody = document.getElementById('resultsBody');
       if (results.length === 0) {
-        resultsBody.innerHTML = '<tr><td colspan="4" class="no-results">No results found.</td></tr>';
+        resultsBody.innerHTML = '<tr><td colspan="7" class="no-results">No results found.</td></tr>';
       } else {
         resultsBody.innerHTML = results.map(item => `
           <tr>
@@ -331,10 +338,41 @@
             <td>${item[1]}</td>
             <td>${item[2]}</td>
             <td>$${item[3].toFixed(2)}</td>
+            <td>$${item[4].toFixed(2)}</td>
           </tr>
         `).join('');
+        plotChart(results);
       }
     }
-  </script>
-</body>
-</html>
+
+    // Create a chart comparing charges between Sussex and Kent
+    function plotChart(data) {
+      const sussexCharges = data.filter(row => row[0] === 'Sussex').map(row => row[3]);
+      const kentCharges = data.filter(row => row[0] === 'Kent').map(row => row[3]);
+
+      const ctx = document.getElementById('chargeComparisonChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Sussex', 'Kent'],
+          datasets: [{
+            label: 'Standard Charge Gross Comparison',
+            data: [average(sussexCharges), average(kentCharges)],
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Helper function to calculate the average
+    function average(arr) {
+      return arr.reduce((a, b) => a

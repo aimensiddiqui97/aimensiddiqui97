@@ -95,3 +95,20 @@ const kentURL = 'https://raw.githubusercontent.com/aimensiddiqui97/aimensiddiqui
 
 loadCSV(sussexURL, sussexData);
 loadCSV(kentURL, kentData);
+
+function renderTable(data) {
+    console.log("Rendering table with data:", data);  // Log the data passed to renderTable
+    const tableBody = document.getElementById('data-body');
+    tableBody.innerHTML = '';  // Clear existing data
+    data.forEach(row => {
+        const tr = document.createElement('tr');
+        Object.values(row).forEach(value => {
+            const td = document.createElement('td');
+            td.textContent = value;
+            tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+    });
+    $('#data-table').DataTable(); // Initialize DataTables
+}
+

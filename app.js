@@ -90,8 +90,8 @@ function average(arr) {
 }
 
 // Load the CSV files
-const sussexURL = 'https://raw.githubusercontent.com/aimensiddiqui97/aimensiddiqui97/main/BayhealthSussexNDCs.csv';
-const kentURL = 'https://raw.githubusercontent.com/aimensiddiqui97/aimensiddiqui97/main/BayhealthKentNDCs.csv';
+const sussexURL = 'https://raw.githubusercontent.com/aimensiddiqui97/aimensiddiqui97/main/BayhealthSussexNDCS.csv';
+const kentURL = 'https://raw.githubusercontent.com/aimensiddiqui97/aimensiddiqui97/main/BayhealthKentNDCS.csv';
 
 loadCSV(sussexURL, sussexData);
 loadCSV(kentURL, kentData);
